@@ -4,6 +4,14 @@
 
 A local phone-friendly driving panel with three opt-in USB camera views and a relative movement map. The laptop rides on the robot and stays connected to its motor boards; the phone connects over trusted Wi-Fi. No cloud service or AI training is required.
 
+## Current support and what's next
+
+**Available now:** wheel-direction controls for forward, backward, left/right turns and curves, plus viewing all three configured robot cameras together (Head, Left Wrist, Right Wrist).
+
+**Coming next:** arm and gripper control. These controls will be added after calibration and testing; they are not part of the current release.
+
+Live camera viewing requires the three cameras connected to the laptop, the optional camera dependency, and the correct device indices. The implementation is ready for robot-side testing; physical three-camera operation has not yet been validated on this build.
+
 > Prototype: simulation and automated tests pass. This new panel's live cameras, real encoder path tracking, and hardware driving still need robot-side validation. SO-101 arm/gripper, Xbox, and Quest controls are not implemented. This is an independent project, not an official XLeRobot/LeRobot release.
 
 ## Features
@@ -104,3 +112,4 @@ References:
 - [LeRobot](https://github.com/huggingface/lerobot)
 
 No claims of SO-101 arm support or hardware certification are made by this prototype.
+
