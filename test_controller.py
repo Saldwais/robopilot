@@ -43,5 +43,23 @@ class ControlTests(unittest.TestCase):
     def test_stale_sequence(self):
         self.arm(); self.drive()
         with self.assertRaises(ValueError): self.drive()
+    def test_analog_forward(self):
+        self.arm();self.drive(throttle=1,turn=0,speed=50)
+        self.assertEqual(self.driver.values,(-50,50))
+    def test_analog_right(self):
+        self.arm();self.drive(throttle=0,turn=-1,speed=10)
+        self.assertEqual(self.driver.values,(-10,-10))
+    def test_analog_normalizes_combined_stick(self):
+        self.arm();self.drive(throttle=1,turn=1,speed=50)
+        self.assertEqual(self.driver.values,(0,50))
+    def test_analog_reject_nan(self):
+        self.arm()
+        with self.assertRaises(ValueError):self.drive(throttle=float('nan'),turn=0)
+    def test_analog_reject_out_of_range(self):
+        self.arm()
+        with self.assertRaises(ValueError):self.drive(throttle=2,turn=0)
+    def test_analog_still_expires(self):
+        self.arm();self.drive(throttle=1,turn=.2);self.c.tick(now=1.46)
+        self.assertEqual(self.driver.values,(0,0));self.assertFalse(self.c.armed)
 
 if __name__ == '__main__': unittest.main()

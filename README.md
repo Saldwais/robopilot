@@ -1,6 +1,6 @@
 # RoboPilot — Saleh Aldwais
 
-**Phone Control for XLeRobot** · Prototype v0.1.0 · Author: Saleh Aldwais
+**Phone & Xbox Control for XLeRobot** · Prototype v0.2.0 · Author: Saleh Aldwais
 
 A local phone-friendly driving panel with three opt-in USB camera views and a relative movement map. The laptop rides on the robot and stays connected to its motor boards; the phone connects over trusted Wi-Fi. No cloud service or AI training is required.
 
@@ -12,7 +12,7 @@ A local phone-friendly driving panel with three opt-in USB camera views and a re
 
 Live camera viewing requires the three cameras connected to the laptop, the optional camera dependency, and the correct device indices. The implementation is ready for robot-side testing; physical three-camera operation has not yet been validated on this build.
 
-> Prototype: simulation and automated tests pass. This new panel's live cameras, real encoder path tracking, and hardware driving still need robot-side validation. SO-101 arm/gripper, Xbox, and Quest controls are not implemented. This is an independent project, not an official XLeRobot/LeRobot release.
+> Prototype: simulation and automated tests pass. This panel's live cameras, real encoder path tracking, Xbox pairing and hardware driving still need robot-side validation. Xbox wheel controls are implemented; SO-101 arm/gripper and Quest controls are not. This is an independent project, not an official XLeRobot/LeRobot release.
 
 ## Features
 
@@ -23,8 +23,17 @@ Live camera viewing requires the three cameras connected to the laptop, the opti
 - Relative path map from wheel-position readings in hardware mode. Simulation displays a labeled simulated path. This is NOT room scanning, SLAM, obstacle detection, GPS, or autonomous navigation.
 - Per-launch access key, authenticated image endpoints, and one armed client at a time.
 - Keys: 8 forward, 2 backward, 6 left, 4 right, 5/Space stop (requested custom layout).
+- Xbox standard-mapping controller: analog left-stick driving, LB hold-to-drive, A to arm from neutral, B to stop. Bluetooth, USB, or Xbox Wireless Adapter pairing is handled by Windows.
+
+## Xbox wireless option
+
+Use the controller paired to the laptop, not the phone. Open the laptop's **localhost** URL in Edge or Chrome and keep the page visible/focused. Press a controller button once, click **Use Xbox**, then release buttons and centre the stick. Press **A** to arm, hold **LB**, and move the **left stick** to drive/steer. Release LB or press **B** to stop and disarm. Press A again from neutral to rearm. Disconnection/focus loss requests stop; no automatic rearming is performed. Right stick/triggers do not move arms.
+
+The Gamepad API is restricted to secure contexts: localhost is suitable; the phone's ordinary Wi-Fi HTTP URL may not expose gamepads. Bluetooth/Xbox Wireless pairing happens in Windows, not through Wi-Fi. Physical controller pairing and robot driving are still pending validation. See [today's setup checklist](SETUP_TODAY.md).
 
 ![RoboPilot interface](preview.png)
+
+![Xbox controller option](xbox-preview.png)
 
 ## Quick start — simulation, no robot needed
 
@@ -101,7 +110,13 @@ No physical calibration, collision avoidance, autonomous navigation, grabbing or
 python -m unittest discover -s . -p "test_*.py"
 ```
 
-22 automated tests cover direction signs, timeouts, stale requests, ownership, speed cap, encoder wrapping, map resets, camera opt-in/staleness, authenticated status/images, and cross-origin command rejection. Browser preview checked separately. Physical three-camera streaming, phone Wi-Fi behavior and hardware odometry remain unverified.
+28 Python tests cover direction signs, analog mixing/normalization, timeouts, stale requests, ownership, speed cap, encoder wrapping, map resets, camera opt-in/staleness, authenticated status/images, and cross-origin command rejection. JavaScript tests cover gamepad mapping and browser control logic with simulated inputs:
+
+```powershell
+node --test test_gamepad.cjs test_gamepad_ui.cjs
+```
+
+Browser preview checked separately. Physical controller pairing, three-camera streaming, phone Wi-Fi behavior and hardware odometry remain unverified.
 
 ## License and acknowledgments
 
@@ -112,4 +127,3 @@ References:
 - [LeRobot](https://github.com/huggingface/lerobot)
 
 No claims of SO-101 arm support or hardware certification are made by this prototype.
-

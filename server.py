@@ -1,6 +1,7 @@
 """Local phone remote. Simulation is the default; no serial imports until --hardware."""
 import argparse
 import json
+import math
 import secrets
 import socket
 import threading
@@ -147,12 +148,23 @@ class Controller:
             seq = data.get('seq')
             if type(seq) is not int or seq <= self.sequence:
                 raise ValueError('Stale command')
-            direction = data.get('direction')
             speed = data.get('speed')
-            if direction not in DIRECTIONS or type(speed) is not int or not 0 <= speed <= 50:
-                raise ValueError('Invalid direction or speed (0–50)')
+            if type(speed) is not int or not 0 <= speed <= 50:
+                raise ValueError('Invalid speed (0–50)')
+            if 'throttle' in data or 'turn' in data:
+                throttle, turn = data.get('throttle'), data.get('turn')
+                if any(type(v) not in (float, int) or not math.isfinite(v) or abs(v) > 1 for v in (throttle, turn)):
+                    raise ValueError('Invalid analog input')
+                left, right = throttle - turn, throttle + turn
+                divisor = max(1, abs(left), abs(right))
+                target = (round(-left / divisor * speed), round(right / divisor * speed))
+            else:
+                direction = data.get('direction')
+                if direction not in DIRECTIONS:
+                    raise ValueError('Invalid direction')
+                target = tuple(round(v * speed) for v in DIRECTIONS[direction])
             self.sequence = seq
-            self.target = tuple(round(v * speed) for v in DIRECTIONS[direction])
+            self.target = target
             self.deadline = now + self.TIMEOUT
     def tick(self, now=None):
         now = time.monotonic() if now is None else now
@@ -219,7 +231,8 @@ def make_handler(controller, token, hardware, cameras=None):
                     return self.respond(200, frame, 'image/jpeg') if frame else self.respond(503, {'error':'No fresh camera frame'})
                 return self.respond(404, {'error':'Not found'})
             files = {'/': ('index.html', 'text/html; charset=utf-8'),
-                     '/app.js': ('app.js', 'application/javascript'), '/style.css': ('style.css', 'text/css')}
+                     '/app.js': ('app.js', 'application/javascript'), '/gamepad.js': ('gamepad.js', 'application/javascript'),
+                     '/style.css': ('style.css', 'text/css')}
             if path not in files:
                 return self.respond(404, {'error': 'Not found'})
             name, mime = files[path]
