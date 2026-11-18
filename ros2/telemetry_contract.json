@@ -1,0 +1,1 @@
+{"schema_version":"1.0","device_id":"configured-outside-repository","timestamp":"RFC3339 UTC","drive_type":"differential_2wd|skid_4wd","mode":"sim|hardware","battery_voltage_v":null,"wheel_rates_rad_s":[],"odom":{"x_m":0.0,"y_m":0.0,"yaw_rad":0.0},"estop":true,"command_age_ms":null}

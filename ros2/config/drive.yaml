@@ -1,0 +1,14 @@
+# Select differential_2wd or skid_4wd. Set wheel radius/track to measured values.
+drive:
+  ros__parameters:
+    drive_type: differential_2wd
+    wheel_radius_m: 0.05
+    track_width_m: 0.25
+    wheel_separation_multiplier: 1.0
+    max_linear_mps: 0.25
+    max_angular_rps: 0.8
+    command_timeout_s: 0.35
+    motor_ids: [9, 10]
+    motor_signs: [-1, 1]
+    command_topic: /cmd_vel
+    odom_topic: /odom
