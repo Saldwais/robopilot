@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robopilot">
   <xacro:arg name="drive_type" default="differential_2wd"/>
-  <xacro:property name="is_4wd" value="$(arg drive_type) == 'skid_4wd'"/>
   <material name="body_blue"><color rgba="0.12 0.30 0.62 1"/></material>
   <material name="wheel_black"><color rgba="0.04 0.04 0.04 1"/></material>
   <link name="base_footprint"/>
@@ -21,7 +20,16 @@
     <link name="caster_link"><visual><geometry><sphere radius="0.035"/></geometry><material name="wheel_black"/></visual><collision><geometry><sphere radius="0.035"/></geometry></collision><inertial><mass value="0.15"/><inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/></inertial></link>
     <joint name="caster_joint" type="fixed"><parent link="base_link"/><child link="caster_link"/><origin xyz="-0.17 0 -0.09"/></joint>
   </xacro:if>
+  <xacro:if value="$(eval arg('drive_type') == 'differential_2wd')">
+    <gazebo><plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive"><left_joint>left_front_joint</left_joint><right_joint>right_front_joint</right_joint><wheel_separation>0.36</wheel_separation><wheel_radius>0.075</wheel_radius><topic>/cmd_vel</topic><odom_topic>/odom</odom_topic><frame_id>odom</frame_id><child_frame_id>base_footprint</child_frame_id><odom_publish_frequency>30</odom_publish_frequency></plugin></gazebo>
+  </xacro:if>
+  <xacro:if value="$(eval arg('drive_type') == 'skid_4wd')">
+    <gazebo><plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive"><left_joint>left_front_joint</left_joint><left_joint>left_rear_joint</left_joint><right_joint>right_front_joint</right_joint><right_joint>right_rear_joint</right_joint><wheel_separation>0.36</wheel_separation><wheel_radius>0.075</wheel_radius><topic>/cmd_vel</topic><odom_topic>/odom</odom_topic><frame_id>odom</frame_id><child_frame_id>base_footprint</child_frame_id><odom_publish_frequency>30</odom_publish_frequency></plugin></gazebo>
+  </xacro:if>
   <link name="lidar_link"><visual><geometry><cylinder radius="0.045" length="0.05"/></geometry><material name="wheel_black"/></visual><inertial><mass value="0.2"/><inertia ixx="0.0002" ixy="0" ixz="0" iyy="0.0002" iyz="0" izz="0.0002"/></inertial></link>
   <joint name="lidar_joint" type="fixed"><parent link="base_link"/><child link="lidar_link"/><origin xyz="0.11 0 0.12"/></joint>
+  <link name="camera_link"><visual><geometry><box size="0.06 0.04 0.03"/></geometry><material name="wheel_black"/></visual><inertial><mass value="0.1"/><inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/></inertial></link>
+  <joint name="camera_joint" type="fixed"><parent link="base_link"/><child link="camera_link"/><origin xyz="0.19 0 0.06" rpy="0 0 0"/></joint>
+  <gazebo reference="camera_link"><sensor name="front_camera" type="camera"><pose>0 0 0 0 0 0</pose><topic>/camera/image</topic><update_rate>10</update_rate><camera><horizontal_fov>1.2</horizontal_fov><image><width>640</width><height>480</height><format>R8G8B8</format></image><clip><near>0.1</near><far>30</far></clip></camera><always_on>true</always_on></sensor></gazebo>
   <gazebo reference="lidar_link"><sensor name="robopilot_lidar" type="gpu_lidar"><pose>0 0 0 0 0 0</pose><topic>/scan</topic><update_rate>10</update_rate><ray><scan><horizontal><samples>720</samples><resolution>1</resolution><min_angle>-3.14159</min_angle><max_angle>3.14159</max_angle></horizontal></scan><range><min>0.12</min><max>12.0</max><resolution>0.01</resolution></range></ray><always_on>true</always_on><visualize>true</visualize></sensor></gazebo>
 </robot>

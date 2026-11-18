@@ -5,34 +5,31 @@ Visualization Manager:
   Class: ""
   Displays:
     - Class: rviz_default_plugins/Grid
-      Name: Ground Grid
+      Name: Grid
       Enabled: true
       Plane: XY
       Cell Size: 1
       Color: 120; 120; 120
     - Class: rviz_default_plugins/RobotModel
-      Name: Robot Outside View
+      Name: Robot Exterior Model
       Enabled: true
       Description Source: Topic
-      Description Topic:
-        Value: /robot_description
+      Description Topic: {Value: /robot_description}
     - Class: rviz_default_plugins/LaserScan
-      Name: LiDAR Scanner View
+      Name: LiDAR Scan
       Enabled: true
-      Topic:
-        Value: /scan
-        Reliability Policy: Best Effort
+      Topic: {Value: /scan, Reliability Policy: Best Effort}
       Size (m): 0.03
       Style: Points
       Color Transformer: Intensity
-  Global Options:
-    Fixed Frame: base_link
+    - Class: rviz_default_plugins/Image
+      Name: Camera Perception Overlay
+      Enabled: true
+      Topic: {Value: /perception/annotated}
+  Global Options: {Fixed Frame: odom}
   Tools:
     - Class: rviz_default_plugins/Interact
     - Class: rviz_default_plugins/MoveCamera
     - Class: rviz_default_plugins/Select
   Views:
-    Current:
-      Class: rviz_default_plugins/Orbit
-      Distance: 4
-      Focal Point: 0; 0; 0
+    Current: {Class: rviz_default_plugins/Orbit, Distance: 4, Focal Point: 0; 0; 0}

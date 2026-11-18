@@ -3,7 +3,7 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Float64MultiArray
-from drive_model import DriveConfig, wheel_targets
+from .drive_model import DriveConfig, wheel_targets
 
 class DriveNode(Node):
     def __init__(self):
@@ -16,13 +16,17 @@ class DriveNode(Node):
         self.declare_parameter('motor_signs', [-1, 1])
         self.declare_parameter('command_timeout_s', 0.35)
         self.declare_parameter('hardware_enabled', False)
+        drive_type = self.get_parameter('drive_type').value
+        motor_ids = tuple(self.get_parameter('motor_ids').value)
+        motor_signs = tuple(self.get_parameter('motor_signs').value)
+        if drive_type == 'skid_4wd' and motor_ids == (9, 10):
+            motor_ids, motor_signs = (9, 10, 11, 12), (-1, -1, 1, 1)
         self.config = DriveConfig(
-            self.get_parameter('drive_type').value,
+            drive_type,
             self.get_parameter('wheel_radius_m').value,
             self.get_parameter('track_width_m').value,
             self.get_parameter('max_wheel_rad_s').value,
-            tuple(self.get_parameter('motor_ids').value),
-            tuple(self.get_parameter('motor_signs').value))
+            motor_ids, motor_signs)
         self.config.validate()
         self.timeout = float(self.get_parameter('command_timeout_s').value)
         self.hardware_enabled = bool(self.get_parameter('hardware_enabled').value)

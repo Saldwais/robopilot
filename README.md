@@ -18,6 +18,8 @@ Live camera viewing requires the three cameras connected to the laptop, the opti
 
 The `ros2/` directory adds an experimental ROS 2 extension with two configurable drive layouts: `differential_2wd` (left/right wheels) and `skid_4wd` (front/rear wheel pairs). It includes a 3D test world, a robot model with a simulated LiDAR sensor, and an RViz layout intended to show the robot model and LiDAR scan in separate displays. The AWS folder contains an optional AWS IoT Core MQTT telemetry scaffold; it does not accept cloud motion commands.
 
+The extension also includes camera perception with default YOLO-World prompts for road, tree, person, dog, and stairs; a reactive LiDAR point-to-point local planner; sidewalk scene proxies; and an RViz camera overlay. The planner is experimental and not safety-certified. Fourteen unit/static checks pass. ROS 2, Gazebo, and Xacro are not installed in this build environment, so the full simulator has not run; physical hardware remains untested.
+
 **Status:** the wheel-kinematics unit tests and XML syntax checks pass. Full ROS 2 + Gazebo launch, LiDAR visualization, AWS end-to-end connection, and physical motor/LiDAR tests have not yet been run. The ROS node currently publishes wheel targets only; no robot-specific motor driver is connected. See [ROS 2 setup and current limitations](ros2/README.md).
 
 ## Features
