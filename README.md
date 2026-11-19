@@ -1,8 +1,21 @@
 # RoboPilot — Saleh Aldwais
 
-**Phone & Xbox Control for XLeRobot** · Prototype v0.2.0 · Author: Saleh Aldwais
+**LiDAR-first ROS 2 mobile robot prototype** · Open source · Author: Saleh Aldwais
 
-A local phone-friendly driving panel with three opt-in USB camera views and a relative movement map. The laptop rides on the robot and stays connected to its motor boards; the phone connects over trusted Wi-Fi. No cloud service or AI training is required.
+RoboPilot is an open-source mobile-robot project centered on experimental LiDAR-based mapless navigation. It combines an experimental ROS 2 extension, camera perception, 2WD/4WD drive options, and a local phone/Xbox wheel controller. The 3D training-simulation panel below shows the intended workflow; the full Gazebo and training pipeline have not yet been validated.
+
+![RoboPilot LiDAR-first navigation, camera perception, wheel control, and simulation concept](docs/images/robopilot-lidar-first-training-concept.jpg)
+
+*Concept mockup only. It is not a live telemetry screenshot or proof of autonomous hardware operation.*
+
+## Feature priority
+
+1. **LiDAR-first mapless local navigation** — experimental reactive point-to-point planner.
+2. **Camera perception** — experimental scene labels for road, tree, person, dog, and stairs.
+3. **Wheel control** — ROS 2 2WD/4WD layouts plus the existing phone/Xbox controller.
+4. **Simulation for development and training** — a Gazebo test world is included; an end-to-end training workflow has not been run or validated.
+5. **AWS IoT telemetry** — optional scaffold; it does not send remote motion commands.
+
 
 ## Current support and what's next
 
