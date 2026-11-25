@@ -1,0 +1,12 @@
+recordings/
+outputs/
+checkpoints/
+calibration/
+.venv/
+__pycache__/
+*.safetensors
+*.pt
+*.pth
+*.parquet
+*.mp4
+*.env
