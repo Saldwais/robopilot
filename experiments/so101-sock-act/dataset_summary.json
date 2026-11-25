@@ -1,0 +1,36 @@
+{
+  "repo_id": "local/socks-act-merged-20",
+  "codebase_version": "v3.0",
+  "fps": 15,
+  "total_episodes": 20,
+  "total_frames": 35974,
+  "total_tasks": 1,
+  "robot_type": "so_follower",
+  "joint_names": [
+    "shoulder_pan.pos",
+    "shoulder_lift.pos",
+    "elbow_flex.pos",
+    "wrist_flex.pos",
+    "wrist_roll.pos",
+    "gripper.pos"
+  ],
+  "camera_features": {
+    "observation.images.camera0": {
+      "shape": [
+        480,
+        640,
+        3
+      ],
+      "codec": "h264"
+    },
+    "observation.images.camera1": {
+      "shape": [
+        480,
+        640,
+        3
+      ],
+      "codec": "h264"
+    }
+  },
+  "note": "Extracted metadata summary; not the full dataset metadata or actual data."
+}
